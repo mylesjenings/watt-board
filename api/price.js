@@ -1,7 +1,7 @@
 const snapshot = require('../snapshot.json');
 module.exports = async function(req,res){
   try {
-    const response=await fetch('https://fchart.stock.naver.com/sise.nhn?symbol=066970&timeframe=day&count=850&requestType=0',{signal:AbortSignal.timeout(8000),headers:{'User-Agent':'Mozilla/5.0'}});
+    const response=await fetch('https://fchart.stock.naver.com/sise.nhn?symbol=066970&timeframe=day&count=1600&requestType=0',{signal:AbortSignal.timeout(8000),headers:{'User-Agent':'Mozilla/5.0'}});
     if(!response.ok) throw Error('upstream');
     const xml=await response.text();
     const points=[...xml.matchAll(/<item\s+data="([^\"]+)"/g)].map(m=>{const a=m[1].split('|');return {date:`${a[0].slice(0,4)}-${a[0].slice(4,6)}-${a[0].slice(6,8)}`,close:Number(a[4])}}).filter(p=>p.date.length===10&&Number.isFinite(p.close)&&p.close>0);
